@@ -1,0 +1,1 @@
+<bound PYQT_SIGNAL receiveUpdateSignal of MainWindow object at 0x11356e3a0>
