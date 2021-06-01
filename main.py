@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
     isHideFunctinal = True
     app = None
     isWaveOpen = False
+    dataReceived = ""
 
     def __init__(self,app):
         super().__init__()
@@ -470,14 +471,18 @@ class MainWindow(QMainWindow):
                         if time.time() - self.timeLastReceive> int(self.receiveSettingsAutoLinefeedTime.text())/1000:
                             if self.sendSettingsCFLF.isChecked():
                                 self.receiveUpdateSignal.emit("\r\n")
+                                self.dataReceived += ("\r\n")
                             else:
                                 self.receiveUpdateSignal.emit("\n")
+                                self.dataReceived += ("\n")
                             self.timeLastReceive = time.time()
                     if self.receiveSettingsHex.isChecked():
                         strReceived = self.asciiB2HexString(bytes)
                         self.receiveUpdateSignal.emit(strReceived)
+                        self.dataReceived += (strReceived)
                     else:
                         self.receiveUpdateSignal.emit(bytes.decode(self.encodingCombobox.currentText(),"ignore"))
+                        self.dataReceived += (bytes.decode(self.encodingCombobox.currentText(),"ignore"))
             except Exception as e:
                 # print("receiveData error")
                 # if self.com.is_open and not self.serialPortCombobox.isEnabled():
@@ -491,7 +496,7 @@ class MainWindow(QMainWindow):
 
     def printMessage(self):
         with open('message.txt','w',encoding='utf-8') as file:
-            file.write(self.receiveUpdateSignal.__str__())
+            file.write(self.dataReceived)
 
     def updateReceivedDataDisplay(self,str):
         if str != "":
@@ -533,6 +538,7 @@ class MainWindow(QMainWindow):
         self.receiveCount = 0;
         self.sendCount = 0;
         self.receiveUpdateSignal.emit(None)
+        self.dataReceived = ""
 
     def MoveToCenter(self):
         qr = self.frameGeometry()
