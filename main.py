@@ -132,6 +132,7 @@ class MainWindow(QMainWindow):
         self.sendArea = QTextEdit()
         self.clearReceiveButtion = QPushButton(parameters.strClearReceive)
         self.printMessageButton = QPushButton(parameters.strPrintMessage)
+        self.checkBoxFloat = QCheckBox(parameters.strFloat);
         self.sendButtion = QPushButton(parameters.strSend)
         self.sendHistory = ComboBox()
         sendWidget = QWidget()
@@ -140,6 +141,7 @@ class MainWindow(QMainWindow):
         buttonLayout = QVBoxLayout()
         buttonLayout.addWidget(self.clearReceiveButtion)
         buttonLayout.addWidget(self.printMessageButton)
+        buttonLayout.addWidget(self.checkBoxFloat)
         buttonLayout.addStretch(1)
         buttonLayout.addWidget(self.sendButtion)
         sendAreaWidgetsLayout.addWidget(self.sendArea)
@@ -294,6 +296,7 @@ class MainWindow(QMainWindow):
         self.receiveUpdateSignal.connect(self.updateReceivedDataDisplay)
         self.clearReceiveButtion.clicked.connect(self.clearReceiveBuffer)
         self.printMessageButton.clicked.connect(self.printMessage)
+        self.checkBoxFloat.clicked.connect(self.floatCheckChanged)
         self.serialPortCombobox.clicked.connect(self.portComboboxClicked)
         self.sendSettingsHex.clicked.connect(self.onSendSettingsHexClicked)
         self.sendSettingsAscii.clicked.connect(self.onSendSettingsAsciiClicked)
@@ -392,6 +395,12 @@ class MainWindow(QMainWindow):
             self.com.setRTS(False)
         else:
             self.com.setRTS(True)
+
+    def floatCheckChanged(self):
+        if self.checkBoxFloat.isChecked():
+            self.com.setFloat(False)
+        else:
+            self.com.setFloat(True)
 
     def dtrChanged(self):
         if self.checkBoxDtr.isChecked():
@@ -652,6 +661,10 @@ class MainWindow(QMainWindow):
             paramObj.rts = 1
         else:
             paramObj.rts = 0
+        if self.checkBoxFloat.isChecked():
+            paramObj.float_check = 1
+        else:
+            paramObj.float_check = 0
         if self.checkBoxDtr.isChecked():
             paramObj.dtr = 1
         else:
@@ -702,6 +715,10 @@ class MainWindow(QMainWindow):
             self.checkBoxRts.setChecked(False)
         else:
             self.checkBoxRts.setChecked(True)
+        if paramObj.float_check == 0:
+            self.checkBoxFloat.setChecked(False)
+        else:
+            self.checkBoxFloat.setChecked(True)
         if paramObj.dtr == 0:
             self.checkBoxDtr.setChecked(False)
         else:

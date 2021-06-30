@@ -30,6 +30,7 @@ strSerialReceiveSettings = "Receive Settings"
 strSerialSendSettings = "Send Settings"
 strClearReceive = "ClearReceive"
 strPrintMessage = "Print"
+strFloat = "小数点后三位"
 strAdd = "+"
 strFunctionalSend = "Functional Send"
 strSendFile = "Send File"
@@ -79,6 +80,7 @@ class ParametersToSave:
     skin = 2
     rts  = 0
     dtr  = 0
+    float_check = 1
     encodingIndex = 0
     sendHistoryList = []
     def __init__(self):
